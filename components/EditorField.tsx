@@ -1,16 +1,18 @@
 import { Priority, ToDoEntryDto } from "@/data/model/ToDoEntry";
 import { StyleSheet, View } from "react-native";
-import { Checkbox, Text, TextInput } from "react-native-paper";
+import { Checkbox, Text, TextInput, useTheme } from "react-native-paper";
 import { DatePickerInput } from 'react-native-paper-dates';
 import { Dropdown, Option } from 'react-native-paper-dropdown';
 
 type EditorFielsProps = {
     todo: ToDoEntryDto,
+    showTitleError: boolean,
     onChange: (t: ToDoEntryDto) => void;
 };
 
 export default function EditorField(props: EditorFielsProps) {
     const isDue = props.todo.dueDate !== null;
+    const theme = useTheme();
 
     const dueDateCheckboxHandler = (setToFalse: boolean) => {
         if (setToFalse) {
@@ -29,6 +31,16 @@ export default function EditorField(props: EditorFielsProps) {
                 mode="outlined"
                 style={fieldStyle.input}
             />
+            {
+                props.showTitleError ? (
+                    <Text
+                        style={{ ...fieldStyle.input, color: theme.colors.error }}>
+                        Please enter at least 1 character
+                    </Text>
+                ) : (
+                    <></>
+                )
+            }
             <TextInput
                 label="Description"
                 value={props.todo.description ?? ''}
