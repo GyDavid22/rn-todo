@@ -13,12 +13,10 @@ export default function Index() {
     const [items, setItems] = useState<ToDoEntry[]>([]);
 
     useFocusEffect(useCallback(() => {
-        update();
+        (async () => {
+            setItems(await getAllItems());
+        })();
     }, []));
-
-    const update = async () => {
-        setItems(await getAllItems());
-    };
 
     return (
         <View style={{ flex: 1, backgroundColor: theme.colors.background }}>

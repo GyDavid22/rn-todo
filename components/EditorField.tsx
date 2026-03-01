@@ -12,15 +12,11 @@ type EditorFielsProps = {
 export default function EditorField(props: EditorFielsProps) {
     const isDue = props.todo.dueDate !== null;
 
-    const updateTodo = (t: ToDoEntryDto) => {
-        props.onChange(t);
-    };
-
     const dueDateCheckboxHandler = (setToFalse: boolean) => {
         if (setToFalse) {
-            updateTodo({ ...props.todo, dueDate: null });
+            props.onChange({ ...props.todo, dueDate: null });
         } else {
-            updateTodo({ ...props.todo, dueDate: new Date().toISOString() });
+            props.onChange({ ...props.todo, dueDate: new Date().toISOString() });
         }
     };
 
@@ -29,14 +25,14 @@ export default function EditorField(props: EditorFielsProps) {
             <TextInput
                 label="Title"
                 value={props.todo.title}
-                onChangeText={text => updateTodo({ ...props.todo, title: text })}
+                onChangeText={text => props.onChange({ ...props.todo, title: text })}
                 mode="outlined"
                 style={fieldStyle.input}
             />
             <TextInput
                 label="Description"
                 value={props.todo.description ?? ''}
-                onChangeText={text => updateTodo({ ...props.todo, description: text === '' ? null : text })}
+                onChangeText={text => props.onChange({ ...props.todo, description: text === '' ? null : text })}
                 mode="outlined"
                 multiline={true}
                 style={{ ...fieldStyle.input, height: 200 }}
@@ -46,15 +42,14 @@ export default function EditorField(props: EditorFielsProps) {
                     options={options}
                     mode="outlined"
                     value={props.todo.priority}
-                    onSelect={v => updateTodo({ ...props.todo, priority: v as Priority })}
+                    onSelect={v => props.onChange({ ...props.todo, priority: v as Priority })}
                     label={'Priority'}
                 />
             </View>
             <View style={{ ...fieldStyle.input, flexDirection: 'row', alignItems: 'center' }}>
                 <Checkbox
                     status={isDue ? 'checked' : 'unchecked'}
-                    // nem jól állít
-                    onPress={() => { dueDateCheckboxHandler(isDue); }} />
+                    onPress={() => dueDateCheckboxHandler(isDue)} />
                 <Text>Has a due date</Text>
             </View>
             {
@@ -64,7 +59,7 @@ export default function EditorField(props: EditorFielsProps) {
                             locale="en"
                             label="Due date"
                             value={props.todo.dueDate ? new Date(props.todo.dueDate) : new Date()}
-                            onChange={(d) => { updateTodo({ ...props.todo, dueDate: d === undefined ? null : d.toISOString() }); }}
+                            onChange={d => props.onChange({ ...props.todo, dueDate: d === undefined ? null : d.toISOString() })}
                             inputMode="start"
                             mode="outlined"
                             withDateFormatInLabel={false}

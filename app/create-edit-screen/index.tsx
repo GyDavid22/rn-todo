@@ -39,7 +39,7 @@ export default function Index() {
     const dismissModal = () => setShowModal(false);
 
     const backHandler = () => {
-        activateModal('Warning', 'Are you sure want do dismiss the current changes?', exitScreen);
+        activateModal('Warning', 'Are you sure you want do dismiss the current changes?', exitScreen);
     };
     const deleteHandler = () => {
         activateModal('Warning', 'Are you sure you want to delete this item?', async () => { await deleteItem(id!); exitScreen(); });
@@ -59,7 +59,7 @@ export default function Index() {
     return (
         <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <Appbar.Header>
-                <Appbar.BackAction onPress={backHandler}></Appbar.BackAction>
+                <Appbar.BackAction onPress={backHandler} />
                 <Appbar.Content title={isCreating ? 'Create' : 'Edit'} />
                 {
                     isCreating ? (
