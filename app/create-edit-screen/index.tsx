@@ -14,11 +14,13 @@ export default function Index() {
     const id = idRaw ? parseInt(idRaw) : null;
     const isCreating = id === null;
 
+    const [todo, setTodo] = useState<ToDoEntryDto>(getDefaultItem());
+    const [isTitleInvalid, setTitleInvalid] = useState<boolean>(false);
+
     const [showModal, setShowModal] = useState<boolean>(false);
     const [modalTitle, setModalTitle] = useState<string>('');
     const [modalDescription, setModalDescription] = useState<string>('');
     const [modalOkAction, setModalOkAction] = useState<() => void>(() => { });
-    const [todo, setTodo] = useState<ToDoEntryDto>(getDefaultItem());
 
     useEffect(() => {
         const subscription = BackHandler.addEventListener('hardwareBackPress', () => { backHandler(); return true; });
@@ -45,6 +47,10 @@ export default function Index() {
         activateModal('Warning', 'Are you sure you want to delete this item?', async () => { await deleteItem(id!); exitScreen(); });
     };
     const saveHandler = async () => {
+        if (!todo.title.trim().length) {
+            setTitleInvalid(true);
+            return;
+        }
         if (isCreating) {
             await addItem(todo);
         } else {
@@ -71,7 +77,7 @@ export default function Index() {
                 <Appbar.Action icon="check" onPress={saveHandler} />
             </Appbar.Header>
             <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 16 }}>
-                <EditorField todo={todo} onChange={t => setTodo(t)}></EditorField>
+                <EditorField todo={todo} showTitleError={isTitleInvalid} onChange={t => setTodo(t)}></EditorField>
             </ScrollView>
             <Portal>
                 <Dialog visible={showModal} onDismiss={dismissModal}>
