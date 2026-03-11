@@ -21,7 +21,7 @@ export default function Index() {
     return (
         <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <Appbar.Header>
-                <Appbar.Content title="RN To-Dos" />
+                <Appbar.Content title="Productive Day!" />
             </Appbar.Header>
             <View style={{ flex: 1 }}>
                 {

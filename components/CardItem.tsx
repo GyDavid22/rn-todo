@@ -33,7 +33,7 @@ export default function CardItem(props: CardItemProps) {
                         onPress={checkboxHandler} />
                 </View>
                 <View
-                    style={{ flex: 1, paddingHorizontal: 5 }}>
+                    style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 5 }}>
                     <Text
                         style={{ ...(isCheckedOff ? extraFontStyles.done : extraFontStyles.pending), ...theme.fonts.titleLarge }}>
                         {props.todo.title}
@@ -68,7 +68,7 @@ export default function CardItem(props: CardItemProps) {
                                 size={theme.fonts.displaySmall.fontSize} />
                         ) : props.todo.priority == 'STANDARD' ? (
                             <Icon
-                                source="circle"
+                                source="equal"
                                 size={theme.fonts.displaySmall.fontSize} />
                         ) : props.todo.priority == 'LOW' ? (
                             <Icon
