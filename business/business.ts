@@ -1,5 +1,11 @@
-import { ToDoEntry, ToDoEntryDto } from "../data/model/ToDoEntry";
+import { Priority, ToDoEntry, ToDoEntryDto } from "../data/model/ToDoEntry";
 import { AsyncStorageRepo, IToDoRepo } from "../data/repo";
+
+const PRIORITY_VALUES: { [x in Priority]: number } = {
+    'LOW': 0,
+    'STANDARD': 1,
+    'HIGH': 2
+};
 
 const getRepo = async (): Promise<IToDoRepo> => {
     return AsyncStorageRepo.getInstance();
@@ -22,7 +28,27 @@ export const getItem = async (id: number) => {
 };
 
 export const getAllItems = async () => {
-    return (await getRepo()).getAll();
+    return (await (await getRepo()).getAll()).sort((a, b) => {
+        if (a.isCheckedOff !== b.isCheckedOff) {
+            return Number(a.isCheckedOff) - Number(b.isCheckedOff);
+        }
+
+        if (a.priority !== b.priority) {
+            return PRIORITY_VALUES[b.priority] - PRIORITY_VALUES[a.priority];
+        }
+
+        if (a.dueDate === null && b.dueDate !== null) {
+            return 1;
+        }
+        if (b.dueDate === null && a.dueDate !== null) {
+            return -1;
+        }
+        if (a.dueDate !== b.dueDate) {
+            return a.dueDate!.localeCompare(b.dueDate!);
+        }
+
+        return a.uniqueId - b.uniqueId;
+    });
 };
 
 export const toDto = (t: ToDoEntry) => {
