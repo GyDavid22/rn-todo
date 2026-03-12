@@ -33,10 +33,6 @@ export const getAllItems = async () => {
             return Number(a.isCheckedOff) - Number(b.isCheckedOff);
         }
 
-        if (a.priority !== b.priority) {
-            return PRIORITY_VALUES[b.priority] - PRIORITY_VALUES[a.priority];
-        }
-
         if (a.dueDate === null && b.dueDate !== null) {
             return 1;
         }
@@ -47,6 +43,10 @@ export const getAllItems = async () => {
             return a.dueDate!.localeCompare(b.dueDate!);
         }
 
+        if (a.priority !== b.priority) {
+            return PRIORITY_VALUES[b.priority] - PRIORITY_VALUES[a.priority];
+        }
+        
         return a.uniqueId - b.uniqueId;
     });
 };
