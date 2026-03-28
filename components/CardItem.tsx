@@ -6,7 +6,8 @@ import { Card, Checkbox, Icon, Text, useTheme } from "react-native-paper";
 import { ToDoEntry } from "../data/model/ToDoEntry";
 
 type CardItemProps = {
-    todo: ToDoEntry;
+    todo: ToDoEntry,
+    today: Date,
 };
 
 export default function CardItem(props: CardItemProps) {
@@ -19,6 +20,8 @@ export default function CardItem(props: CardItemProps) {
         setCheckedOff(newValue);
         toggleCheckOff(props.todo.uniqueId);
     };
+
+    const dueDate = props.todo.dueDate ? new Date(props.todo.dueDate) : null;
 
     return (
         <Card
@@ -49,10 +52,10 @@ export default function CardItem(props: CardItemProps) {
                         )
                     }
                     {
-                        props.todo.dueDate ? (
+                        dueDate ? (
                             <Text
-                                style={{ ...(isCheckedOff ? extraFontStyles.done : extraFontStyles.pending), marginTop: 5, fontStyle: 'italic' }}>
-                                {new Date(props.todo.dueDate).toLocaleDateString()}
+                                style={{ ...(isCheckedOff ? extraFontStyles.done : props.today > dueDate ? { color: theme.colors.error } : extraFontStyles.pending), marginTop: 5, fontStyle: 'italic' }}>
+                                {dueDate.toLocaleDateString()}
                             </Text>
                         ) : (
                             <></>

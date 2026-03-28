@@ -11,6 +11,11 @@ export default function Index() {
     const theme = useTheme();
 
     const [items, setItems] = useState<ToDoEntry[]>([]);
+    const [today] = useState((() => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        return date;
+    })());
 
     useFocusEffect(useCallback(() => {
         (async () => {
@@ -39,7 +44,7 @@ export default function Index() {
                                             <View style={{ height: 10 }} />
                                         )
                                     }
-                                    <CardItem todo={t.item} key={t.item.uniqueId} />
+                                    <CardItem todo={t.item} today={today} key={t.item.uniqueId} />
                                     {
                                         t.index === items.length - 1 ? (
                                             <View style={{ height: 90 }} />
